@@ -4,7 +4,10 @@ const {createClient} = require('redis');
 const app = express();
 const PORT = 3000;
 
-const redisClient = createClient();
+const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
+const redisClient = createClient({
+  url: redisUrl
+});
 redisClient.on('error', (err) => console.error('Erreur Redis :', err));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
