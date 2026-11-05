@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const {createClient} = require('redis');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
 const redisClient = createClient({
@@ -64,21 +64,22 @@ app.post('/nouveau', async (req, res) => {
 
 async function startServer() {
   try {
+    // On lance la connexion à Redis en arrière-plan
     await redisClient.connect();
     console.log('Connecté à Redis avec succès !');
   } catch (err) {
     console.error("Impossible de se connecter à Redis", err);
   }
-
-  if (process.env.NODE_ENV !== 'test') {
-    app.listen(PORT, () => {
-      console.log(`Serveur démarré sur http://localhost:${PORT}`);
-    });
-  }
 }
 
 if (process.env.NODE_ENV !== 'test') {
+  // 1. On connecte Redis au démarrage
   startServer();
+
+  // 2. On ouvre IMMÉDIATEMENT le port pour que Render valide le déploiement
+  app.listen(PORT, () => {
+    console.log(`Serveur démarré et en écoute sur le port ${PORT}`);
+  });
 }
 
 module.exports = { app, redisClient, startServer };
