@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+    <meta charset="UTF-8">
+    <title>Ajouter un enseignant</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        form { display: flex; flex-direction: column; width: 300px; gap: 10px; }
+        input { padding: 8px; }
+        button { padding: 10px; background-color: #28a745; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Ajouter un nouvel enseignant</h1>
+    <form action="/nouveau" method="POST">
+        <input type="text" name="nom" placeholder="Nom" required>
+        <input type="text" name="prenom" placeholder="Prénom" required>
+        <input type="text" name="matiere" placeholder="Matière enseignée" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <button type="submit">Enregistrer</button>
+    </form>
+    <p><a href="/">Retour à la liste</a></p>
+</body>
+</html>
