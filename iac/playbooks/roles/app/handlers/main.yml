@@ -1,0 +1,6 @@
+---
+- name: Redémarrer l'application
+  systemd:
+    name: app.service
+    state: restarted
+    daemon_reload: yes

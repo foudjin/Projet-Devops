@@ -4,7 +4,7 @@ const {createClient} = require('redis');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
+const redisUrl = process.env.REDIS_URL ||"redis://${process.env.REDIS_HOST || 'redis'}:${process.env.REDIS_PORT || 6379}";
 const redisClient = createClient({
   url: redisUrl
 });
@@ -71,11 +71,10 @@ async function startServer() {
     console.error("Impossible de se connecter à Redis", err);
   }
 }
-
+ // 1. On connecte Redis au démarrage
+startServer();
 if (process.env.NODE_ENV !== 'test') {
-  // 1. On connecte Redis au démarrage
-  startServer();
-
+  
   // 2. On ouvre IMMÉDIATEMENT le port pour que Render valide le déploiement
   app.listen(PORT, () => {
     console.log(`Serveur démarré et en écoute sur le port ${PORT}`);

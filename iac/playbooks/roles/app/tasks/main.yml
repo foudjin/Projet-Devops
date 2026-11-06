@@ -1,0 +1,62 @@
+---
+- name: Mettre à jour le cache APT
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Installer les dépendances système
+  apt:
+    name:
+      - curl
+      - git
+      - build-essential
+    state: present
+
+- name: Ajouter le dépôt Node.js (18.x)
+  shell: curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+  args:
+    creates: /etc/apt/sources.list.d/nodesource.list
+
+- name: Installer Node.js et npm
+  apt:
+    name: nodejs
+    state: present
+
+- name: Installer le serveur Redis
+  apt:
+    name: redis-server
+    state: present
+
+- name: Démarrer et activer Redis
+  systemd:
+    name: redis-server
+    state: started
+    enabled: yes
+
+- name: Installer les dépendances npm de l'application via le dossier synchronisé
+  npm:
+    path: /home/vagrant/app
+    production: yes
+
+- name: Configurer le service systemd pour l'application
+  template:
+    src: app.service.j2
+    dest: /etc/systemd/system/app.service
+  notify:
+    - Redémarrer l'application
+
+- name: Démarrer et activer l'application en arrière-plan
+  systemd:
+    name: app.service
+    state: started
+    enabled: yes
+    daemon_reload: yes
+
+- name: Health check de l'application
+  uri:
+    url: http://localhost:3000/
+    status_code: 200
+  register: health_check
+  retries: 5
+  delay: 3
+  until: health_check is succeeded

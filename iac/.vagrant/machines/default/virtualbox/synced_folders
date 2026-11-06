@@ -1,0 +1,1 @@
+{"virtualbox":{"/home/vagrant/app":{"guestpath":"/home/vagrant/app","hostpath":"C:/labs/gestion-enseignant","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"C:/labs/gestion-enseignant/iac","disabled":false,"__vagrantfile":true}}}
