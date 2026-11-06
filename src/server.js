@@ -4,7 +4,7 @@ const {createClient} = require('redis');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const redisUrl = process.env.REDIS_URL ||"redis://${process.env.REDIS_HOST || 'redis'}:${process.env.REDIS_PORT || 6379}";
+const redisUrl = process.env.REDIS_URL || `redis://${process.env.REDIS_HOST || 'localhost'}:${process.env.REDIS_PORT || 6379}`;
 const redisClient = createClient({
   url: redisUrl
 });
